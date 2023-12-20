@@ -26,26 +26,15 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
     });
   }
 
-  const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
+  const url = request.nextUrl ? request.nextUrl : new URL(request.url);
+  const actualUrlStr = url.pathname.replace("/_gohttps_/","https://").replace("/_gohttp_/","https://") + url.search + url.hash
 
-  // curl \
-  // -H 'Content-Type: application/json' \
-  // -d '{ "prompt": { "text": "Write a story about a magic backpack"} }' \
-  // "https://generativelanguage.googleapis.com/v1beta3/models/text-bison-001:generateText?key={YOUR_KEY}"
+  const actualUrl = new URL(actualUrlStr)
 
-  const acurl = pathname.replace("/_gohttps_/","https://").replace("/_gohttp_/","https://")
-
-  const url = new URL(acurl)
-
-  searchParams.delete("_path");
-
-  searchParams.forEach((value, key) => {
-    url.searchParams.append(key, value);
-  });
 
   const headers = pickHeaders(request.headers, ["content-type"]);
 
-  const response = await fetch(url, {
+  const response = await fetch(actualUrl, {
     body: request.body,
     method: request.method,
     headers,
