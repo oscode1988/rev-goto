@@ -26,29 +26,15 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
     });
   }
 
+  const url = request.nextUrl ? request.nextUrl : new URL(request.url);
+  const actualUrlStr = url.pathname.replace("/_gohttps_/","https://").replace("/_gohttp_/","https://") + url.search + url.hash
 
-  const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
-
-  // curl \
-  // -H 'Content-Type: application/json' \
-  // -d '{ "prompt": { "text": "Write a story about a magic backpack"} }' \
-  // "https://generativelanguage.googleapis.com/v1beta3/models/text-bison-001:generateText?key={YOUR_KEY}"
-
-  const acurl = pathname.replace("/_gohttps_/","https://").replace("/_gohttp_/","https://")
-
-  const url = new URL(acurl)
-
-  searchParams.delete("_path");
-
-  searchParams.forEach((value, key) => {
-    url.searchParams.append(key, value);
-  });
+  const actualUrl = new URL(actualUrlStr)
 
 
+  const headers = pickHeaders(request.headers, ["content-type","user-agent"]);
 
-  const headers = pickHeaders(request.headers, ["content-type"]);
-
-  const response = await fetch(url, {
+  const response = await fetch(actualUrl, {
     body: request.body,
     method: request.method,
     headers,
@@ -58,7 +44,7 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
   const responseHeaders = {
     ...CORS_HEADERS,
     ...Object.fromEntries(
-      pickHeaders(response.headers, ["content-type"])
+      pickHeaders(response.headers, ["content-type","user-agent"])
     ),
   };
 
