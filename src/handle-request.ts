@@ -46,7 +46,7 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
 
 
 
-  const headers = pickHeaders(request.headers, ["content-type","user-agent"]);
+  const headers = pickHeaders(request.headers, ["content-type","user-agent","accept","accept-encoding","accept-language","upgrade-insecure-requests"]);
 
   const response = await fetch(url, {
     body: request.body,
