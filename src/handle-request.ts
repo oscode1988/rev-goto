@@ -33,7 +33,7 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
   // -d '{ "prompt": { "text": "Write a story about a magic backpack"} }' \
   // "https://generativelanguage.googleapis.com/v1beta3/models/text-bison-001:generateText?key={YOUR_KEY}"
 
-  const acurl = pathname.replace("/_goto_/","")
+  const acurl = pathname.replace("/_gohttps_/","https://").replace("/_gohttp_/","https://")
 
   const url = new URL(acurl)
 
