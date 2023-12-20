@@ -2,7 +2,10 @@
 const config = {
   async rewrites() {
     return [
- 
+      {
+        source: "/:_path*",
+        destination: "/api/proxy"
+      },
     ];
   },
 };
