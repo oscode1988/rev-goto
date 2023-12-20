@@ -33,7 +33,10 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
   // -d '{ "prompt": { "text": "Write a story about a magic backpack"} }' \
   // "https://generativelanguage.googleapis.com/v1beta3/models/text-bison-001:generateText?key={YOUR_KEY}"
 
-  const url = new URL(pathname, "https://generativelanguage.googleapis.com");
+  const acurl = pathname.replace("/_goto_/","")
+
+  const url = new URL(acurl)
+
   searchParams.delete("_path");
 
   searchParams.forEach((value, key) => {
@@ -46,6 +49,7 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
     body: request.body,
     method: request.method,
     headers,
+    redirect: 'follow'
   });
 
   const responseHeaders = {
