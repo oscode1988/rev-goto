@@ -27,13 +27,6 @@ export default async function handleRequest(request: NextRequest & { nextUrl?: U
   }
 
 
-  const url = request.nextUrl ? request.nextUrl : new URL(request.url);
-  const actualUrlStr = url.pathname.replace("/_gohttps_/","https://").replace("/_gohttp_/","https://") + url.search + url.hash
-
-  const actualUrl = new URL(actualUrlStr)
-
-  
-
   const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
 
   // curl \
